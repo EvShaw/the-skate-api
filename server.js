@@ -47,7 +47,7 @@ const tricks = {
         'wikiLink': 'https://en.wikipedia.org/wiki/Kickflip'
     },
     'heelflip': {
-        'name':'heelFlip',
+        'name':'Heelflip',
         'skillLevel':'foundational, beginner',
         'inventor':'Rodney Mullen',
         'yearCreated': '1982',
@@ -102,6 +102,11 @@ app.get('/', (requst, response) => {
     response.sendFile(__dirname + '/index.html')
 })
 
+app.get('/api', (request, response) => {
+    response.json(tricks)
+})
+
+
 app.get('/api/:trickName', (request, response) => {
     const trickName = request.params.trickName.toLowerCase()
     if(tricks[trickName]) {
@@ -115,7 +120,3 @@ app.get('/api/:trickName', (request, response) => {
 app.listen(PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`)
 })
-// app.listen(PORT, () => {
-//     console.log(`Server is running on PORT: ${PORT}`)
-// }))
- 
