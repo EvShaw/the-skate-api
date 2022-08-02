@@ -112,6 +112,10 @@ app.get('/api/:trickName', (request, response) => {
     }
 })
 
+app.get('/api', (request, response) => {
+    response.json(tricks)
+})
+
 app.listen(PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`)
 })
