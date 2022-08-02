@@ -102,11 +102,6 @@ app.get('/', (requst, response) => {
     response.sendFile(__dirname + '/index.html')
 })
 
-app.get('/api', (request, response) => {
-    response.json(tricks)
-})
-
-
 app.get('/api/:trickName', (request, response) => {
     const trickName = request.params.trickName.toLowerCase()
     if(tricks[trickName]) {
