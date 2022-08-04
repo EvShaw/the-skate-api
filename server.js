@@ -8,7 +8,7 @@ const app = express()
 const cors = require('cors')
 
 
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || 8001
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -149,18 +149,6 @@ MongoClient.connect(connectionString)
                 .catch(error => console.error(error))
         })
 
-        
-
-        // app.get('/', (request, response) => {
-        //     response.json(trick)
-
-        //     infoCollection.find({ trick }).toArray()
-        //         .then(results => {
-        //             console.log(`Results are: ${results}`)
-        //             response.json(results[0])
-        //         })
-        //         .catch(error => console.error(error))
-        // })
     })
     .catch(error => console.error(error))
 
