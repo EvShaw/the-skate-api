@@ -8,7 +8,7 @@ const app = express()
 const cors = require('cors')
 
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8000
 
 const MongoClient = require('mongodb').MongoClient
 
@@ -114,7 +114,7 @@ app.use(express.json())
 //     },
 // }
 
-MongoClient.connect(connectionString, { useUnifiedTopology: true, useNewUrlParser: true })
+MongoClient.connect(connectionString)
     .then(client => {
         console.log('Connected to Database')
         const db = client.db('the-skate-api')
@@ -136,16 +136,16 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true, useNewUrlParse
                 .catch(error => console.error(error))
         })
 
-        app.get('/api', (request, response) => {
-            response.json(trick)
+        // app.get('/', (request, response) => {
+        //     response.json(trick)
 
-            infoCollection.find({  }).toArray()
-                .then(results => {
-                    console.log(`Results are: ${results}`)
-                    response.json(results[0])
-                })
-                .catch(error => console.error(error))
-        })
+        //     infoCollection.find({ trick }).toArray()
+        //         .then(results => {
+        //             console.log(`Results are: ${results}`)
+        //             response.json(results[0])
+        //         })
+        //         .catch(error => console.error(error))
+        // })
     })
     .catch(error => console.error(error))
 
