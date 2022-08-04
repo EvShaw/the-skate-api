@@ -24,7 +24,7 @@ app.use(express.json())
 // 'yearCreated': '',
 // 'description': '',
 // 'image':'',
-// 'sideNote': '',
+// 'sideNote': '',git a
 // 'wikiLink': ''
 
 // const tricks = {
@@ -114,15 +114,19 @@ app.use(express.json())
 //     },
 // }
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
+})
+
 MongoClient.connect(connectionString)
     .then(client => {
         console.log('Connected to Database')
         const db = client.db('the-skate-api')
         const infoCollection = db.collection('trick-info')
 
-        app.get('/', (requst, response) => {
-            response.sendFile(__dirname + '/index.html')
-        })
+        // app.get('/', (requst, response) => {
+        //     response.sendFile(__dirname + '/index.html')
+        // })
 
         //trickName is the params from the request, my custom query.
         app.get('/api/:trickName', (request, response) => {
@@ -135,6 +139,8 @@ MongoClient.connect(connectionString)
                 })
                 .catch(error => console.error(error))
         })
+
+        
 
         // app.get('/', (request, response) => {
         //     response.json(trick)
