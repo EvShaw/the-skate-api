@@ -1,4 +1,4 @@
-// require('dotenv').config({path: `.env.${process.env}`})
+
 const dotenv = require('dotenv')
 dotenv.config()
 
@@ -16,6 +16,48 @@ const connectionString = `mongodb+srv://${process.env.DB_Username}:${process.env
 
 app.use(cors())
 app.use(express.json())
+
+MongoClient.connect(connectionString)
+    .then(client => {
+        console.log('Connected to Database')
+        const db = client.db('the-skate-api')
+        const infoCollection = db.collection('trick-info')
+
+        app.get('/', (requst, response) => {
+            response.sendFile(__dirname + '/index.html')
+        })
+
+        //trickName is the params from the request, my custom query.
+        app.get('/api/:trickName', (request, response) => {
+            const trickName = request.params.trickName.toLowerCase().replaceAll(' ', '').replaceAll('-', '').replaceAll("'", '')
+
+            infoCollection.find({ trick: trickName }).toArray()
+                .then(results => {
+                    console.log(results)
+                    response.json(results[0])
+                })
+                .catch(error => console.error(error))
+        })
+
+        app.get('/api', (request, response) => {
+            infoCollection.find({}).toArray()
+                .then(results => {
+                    console.log(results)
+                    response.json(results)
+                })
+                .catch(error => console.error(error))
+        })
+
+    })
+    .catch(error => console.error(error))
+
+app.listen(process.env.PORT || PORT, () => {
+    console.log(`Server is running on PORT: ${PORT}`)
+})
+
+
+
+// require('dotenv').config({path: `.env.${process.env}`})
 
 //obj layout: 
 // 'name':'',
@@ -117,41 +159,3 @@ app.use(express.json())
 // app.get('/', (req, res) => {
 //     res.sendFile(__dirname + '/index.html')
 // })
-
-MongoClient.connect(connectionString)
-    .then(client => {
-        console.log('Connected to Database')
-        const db = client.db('the-skate-api')
-        const infoCollection = db.collection('trick-info')
-
-        app.get('/', (requst, response) => {
-            response.sendFile(__dirname + '/index.html')
-        })
-
-        //trickName is the params from the request, my custom query.
-        app.get('/api/:trickName', (request, response) => {
-            const trickName = request.params.trickName.toLowerCase().replaceAll(' ', '').replaceAll('-', '').replaceAll("'", '')
-
-            infoCollection.find({ trick: trickName }).toArray()
-                .then(results => {
-                    console.log(results)
-                    response.json(results[0])
-                })
-                .catch(error => console.error(error))
-        })
-
-        app.get('/api', (request, response) => {
-            infoCollection.find({}).toArray()
-                .then(results => {
-                    console.log(results)
-                    response.json(results)
-                })
-                .catch(error => console.error(error))
-        })
-
-    })
-    .catch(error => console.error(error))
-
-app.listen(process.env.PORT || PORT, () => {
-    console.log(`Server is running on PORT: ${PORT}`)
-})
