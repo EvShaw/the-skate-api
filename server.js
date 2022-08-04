@@ -114,9 +114,9 @@ app.use(express.json())
 //     },
 // }
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/index.html')
+// })
 
 MongoClient.connect(connectionString)
     .then(client => {
@@ -124,9 +124,9 @@ MongoClient.connect(connectionString)
         const db = client.db('the-skate-api')
         const infoCollection = db.collection('trick-info')
 
-        // app.get('/', (requst, response) => {
-        //     response.sendFile(__dirname + '/index.html')
-        // })
+        app.get('/', (requst, response) => {
+            response.sendFile(__dirname + '/index.html')
+        })
 
         //trickName is the params from the request, my custom query.
         app.get('/api/:trickName', (request, response) => {
@@ -136,6 +136,15 @@ MongoClient.connect(connectionString)
                 .then(results => {
                     console.log(results)
                     response.json(results[0])
+                })
+                .catch(error => console.error(error))
+        })
+
+        app.get('/api', (request, response) => {
+            infoCollection.find({}).toArray()
+                .then(results => {
+                    console.log(results)
+                    response.json(results)
                 })
                 .catch(error => console.error(error))
         })
