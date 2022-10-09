@@ -1,11 +1,13 @@
-const express = require('express')
-const app = express()
+
 const dotenv = require('dotenv')
 dotenv.config()
 
+const express = require('express')
+const app = express()
 
 const cors = require('cors')
 
+require('dotenv').config({path: `.env.${process.env}`})
 
 const PORT = process.env.PORT || 8001
 
@@ -16,7 +18,7 @@ const connectionString = `mongodb+srv://${process.env.DB_Username}:${process.env
 app.use(cors())
 app.use(express.json())
 
-MongoClient.connect(connectionString)
+MongoClient.connect(connectionString) 
     .then(client => {
         console.log('Connected to Database')
         const db = client.db('the-skate-api')
@@ -24,11 +26,14 @@ MongoClient.connect(connectionString)
 
         app.get('/', (requst, response) => {
             response.sendFile(__dirname + '/index.html')
+           
         })
 
         //trickName is the params from the request, my custom query.
         app.get('/api/:trickName', (request, response) => {
             const trickName = request.params.trickName.toLowerCase().replaceAll(' ', '').replaceAll('-', '').replaceAll("'", '')
+
+            console.log(`here is the ${trickName}`)
 
             infoCollection.find({ trick: trickName }).toArray()
                 .then(results => {
@@ -39,6 +44,7 @@ MongoClient.connect(connectionString)
         })
 
         app.get('/api', (request, response) => {
+            console.log('get all of them!')
             infoCollection.find({}).toArray()
                 .then(results => {
                     console.log(results)
@@ -50,18 +56,16 @@ MongoClient.connect(connectionString)
     })
     .catch(error => console.error(error))
 
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-})
-
 app.listen(process.env.PORT || PORT, () => {
     console.log(`Server is running on PORT: ${PORT}`)
 })
 
 
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/index.html')
+// })
 
-//obj layout:
+//obj layout: 
 // 'name':'',
 // 'skillLevel':'',
 // 'inventor':'',
@@ -89,7 +93,7 @@ app.listen(process.env.PORT || PORT, () => {
 //         'yearCreated': '1970\'s',
 //         'description': "A 'shuvit' involves rotating the skateboard in a 180-degree motion without flipping the board. It involves pushing (or 'popping') the tail while also shoving the board under the rider's feet. While the board rotates beneath the rider, he/she maintains the same position in the air. If performed with a larger rotation, the trick is named according to the extent of the rotation: a 360-, 540-degree, etc. shuvit.",
 //         'image':'https://tenor.com/bwkXm.gif',
-//         'sideNote': 'also see Ty Page and the Ty Hop, Alan Gelfand, Steve Rocco',
+//         'sideNote': 'also see Ty Page and the Ty Hop, Alan Gelfand, Steve Rocco', 
 //         'wikiLink':'https://en.wikipedia.org/wiki/Shove-it'
 //     },
 
