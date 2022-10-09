@@ -65,6 +65,16 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html')
 })
 
+app.get('/api', (request, response) => {
+    console.log('get all of them!')
+    infoCollection.find({}).toArray()
+        .then(results => {
+            console.log(results)
+            response.json(results)
+        })
+        .catch(error => console.error(error))
+})
+
 //obj layout: 
 // 'name':'',
 // 'skillLevel':'',
