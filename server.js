@@ -57,8 +57,6 @@ app.listen(process.env.PORT || PORT, () => {
 
 
 
-// require('dotenv').config({path: `.env.${process.env}`})
-
 //obj layout: 
 // 'name':'',
 // 'skillLevel':'',
@@ -156,6 +154,6 @@ app.listen(process.env.PORT || PORT, () => {
 //     },
 // }
 
-// app.get('/', (req, res) => {
-//     res.sendFile(__dirname + '/index.html')
-// })
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html')
+})
